@@ -25,8 +25,6 @@ contract ParameterSourceContract is Context {
     }
 
     mapping(uint256 => ParameterSource) public id2source;
-
-    // TODO: we probably don't need this
     mapping(uint256 => address) public id2owner;
 
     // TODO: do we need owner2ids mappping?
@@ -55,6 +53,8 @@ contract ParameterSourceContract is Context {
         return sourceId;
     }
 
+
+    /// @dev if `id` is invalid return ('', '')
     function Id2source(uint256 id)
         public
         view
@@ -63,6 +63,7 @@ contract ParameterSourceContract is Context {
         return id2source[id];
     }
 
+    /// @dev if `id` is invalid return zero address
     function Id2owner(uint256 id)
         public
         view
@@ -71,6 +72,7 @@ contract ParameterSourceContract is Context {
         return id2owner[id];
     }
 
+    /// @dev if `owner` is invalid return ()
     function Owner2ids(address owner)
         public
         view

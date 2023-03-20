@@ -4,6 +4,7 @@ from brownie import (
     accounts,
 )
 from brownie import reverts
+from web3 import constants
 
 
 @pytest.fixture(scope="module")
@@ -29,12 +30,15 @@ def test_CreatePromptParameterSource(source):
 
 
 def test_id2source(source):
+    assert source.Id2source(99) == ("", "")
     assert source.Id2source(0) == ("On-Chain Text", "day dreamer")
 
 
 def test_id2owner(source):
+    assert source.Id2owner(99) == constants.ADDRESS_ZERO
     assert source.Id2owner(0) == accounts[0]
 
 
 def test_owner2ids(source):
+    assert source.Owner2ids(accounts[9]) == ()
     assert source.Owner2ids(accounts[0]) == [0, 1]

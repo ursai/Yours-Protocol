@@ -4,7 +4,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
-import "@console.log/console.sol";
+// import "@console.log/console.sol";
 
 
 // TODO: change the contract name
@@ -15,11 +15,12 @@ contract PromptContract is Context {
 
     // TODO: we can include more info in the event if we want to store more info in the local database
     event PromptCreated(address indexed owner, uint256 indexed promptId);
-    event PromptUpdated(address indexed owner, uint256 indexed promptId);
+    event PromptUpdated(uint256 indexed promptId, uint256 indexed latestVersion);
 
     Counters.Counter public _prompt_id;
 
-    mapping(uint256 => Prompt) private id2prompt;
+    // use array to store all prompt versions
+    mapping(uint256 => Prompt[]) private id2prompt;
     mapping(uint256 => address) private id2owner;
 
     // TODO: do we need owner2ids mappping?
@@ -45,7 +46,7 @@ contract PromptContract is Context {
         uint256 promptId = _prompt_id.current();
         _prompt_id.increment();
 
-        id2prompt[promptId] = Prompt(params, paramSourceIDs, templateAddr);
+        id2prompt[promptId].push(Prompt(params, paramSourceIDs, templateAddr));
         id2owner[promptId] = _msgSender();
         owner2ids[_msgSender()].push(promptId);
         emit PromptCreated(_msgSender(), promptId);
@@ -65,7 +66,7 @@ contract PromptContract is Context {
                           uint256[] calldata paramSourceIDs,
                           string memory templateAddr)
         public
-        returns(uint256)
+        returns(uint256, uint256)
     {
         address owner = id2owner[id];
 
@@ -75,24 +76,28 @@ contract PromptContract is Context {
             require(paramSourceIDs[i] != 0, "updating prompt cannot include source id = 0.");
         }
 
-        uint256 promptId = _prompt_id.current();
-        _prompt_id.increment();
-        id2prompt[promptId] = Prompt(params, paramSourceIDs, templateAddr);
-        id2owner[promptId] = _msgSender();
-        owner2ids[_msgSender()].push(promptId);
-
-        emit PromptUpdated(_msgSender(), promptId);
-        return promptId;
+        id2prompt[id].push(Prompt(params, paramSourceIDs, templateAddr));
+        uint256 latestVersion = id2prompt[id].length-1;
+        emit PromptUpdated(id, latestVersion);
+        return (id, latestVersion);
     }
 
-    function Id2prompt(uint256 id)
+
+    /// @param id the prompt Id
+    /// @param version the prompt versin
+    /// @return a prompt
+    function GetPromptUnsubstantiatedParamList(uint256 id, uint256 version)
         public
         view
         returns(Prompt memory)
     {
-        return id2prompt[id];
+        Prompt[] memory prompts = id2prompt[id];
+        // if id is invalid, the prompts[id].length is 0 and negative version is not allowed
+        require(version < prompts.length, "id or version number is invalid.");
+        return prompts[version];
     }
 
+    /// @dev if `id` is invalid return zero address
     function Id2owner(uint256 id)
         public
         view
@@ -101,6 +106,7 @@ contract PromptContract is Context {
         return id2owner[id];
     }
 
+    /// @dev if `owner` is invalid return ()
     function Owner2ids(address owner)
         public
         view

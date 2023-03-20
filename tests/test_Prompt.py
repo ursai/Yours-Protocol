@@ -4,6 +4,7 @@ from brownie import (
     accounts,
 )
 from brownie import reverts
+from web3 import constants
 
 
 @pytest.fixture(scope="module")
@@ -30,15 +31,14 @@ def test_CreatePrompt(prompt):
     assert pid.return_value == 1
 
 
-def test_id2prompt(prompt):
-    assert prompt.Id2prompt(0) == (["job", "gender"], [0, 0], "ipfs://aaa")
-
-
 def test_id2owner(prompt):
+    # if id is not existed, returns zero address
+    assert prompt.Id2owner(99) == constants.ADDRESS_ZERO
     assert prompt.Id2owner(0) == accounts[0]
 
 
 def test_owner2ids(prompt):
+    assert prompt.Owner2ids(accounts[1]) == ()
     assert prompt.Owner2ids(accounts[0]) == [0, 1]
 
 
@@ -71,4 +71,22 @@ def test_UpdatePrompt(prompt):
         {"from": accounts[0]},
     )
 
-    assert prompt.Id2prompt(2) == (["job3", "gender3"], [1, 1], "ipfs://ccc")
+    assert prompt.GetPromptUnsubstantiatedParamList(0, 1) == (
+        ["job3", "gender3"],
+        [1, 1],
+        "ipfs://ccc",
+    )
+
+
+def test_GetPromptUnsubstantiatedParamList(prompt):
+    with reverts("id or version number is invalid."):
+        prompt.GetPromptUnsubstantiatedParamList(10, 0)
+
+    with reverts("id or version number is invalid."):
+        prompt.GetPromptUnsubstantiatedParamList(0, 5)
+
+    assert prompt.GetPromptUnsubstantiatedParamList(0, 1) == (
+        ["job3", "gender3"],
+        [1, 1],
+        "ipfs://ccc",
+    )
