@@ -1,0 +1,31 @@
+dependencies:
+  - OpenZeppelin/openzeppelin-contracts@4.8.2
+  - OpenZeppelin/openzeppelin-contracts-upgradeable@4.8.2
+  - trufflesuite/ganache@7.5.0
+
+compiler:
+    solc:
+        remappings:
+          - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.8.0"
+          - "@openzeppelin/contracts-upgradeable=OpenZeppelin/openzeppelin-contracts-upgradeable@4.8.0/contracts"
+          - "@console.log=trufflesuite/ganache@7.5.0/src/chains/ethereum/console.log"
+        optimizer:
+            enabled: true
+            runs: 200
+            details:
+                cse: true
+                yul: true
+networks:
+  development:
+      # cmd: /home/mark/.asdf/installs/rust/1.64.0/bin/anvil
+      cmd: ganache-cli
+      host: http://127.0.0.1
+      cmd_settings:
+        port: 8546
+        mnemonic: "test test test test test test test test test test test junk"
+        gas_limit: 12000000
+        accounts: 10
+
+wallets:
+  from_key: ${PRIVATE_KEY}
+dotenv: .env
