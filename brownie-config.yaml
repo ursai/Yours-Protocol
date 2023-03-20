@@ -1,14 +1,16 @@
 dependencies:
   - OpenZeppelin/openzeppelin-contracts@4.8.2
   - OpenZeppelin/openzeppelin-contracts-upgradeable@4.8.2
-  - trufflesuite/ganache@7.5.0
+  - trufflesuite/ganache@7.7.7
 
 compiler:
     solc:
         remappings:
-          - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.8.0"
-          - "@openzeppelin/contracts-upgradeable=OpenZeppelin/openzeppelin-contracts-upgradeable@4.8.0/contracts"
-          - "@console.log=trufflesuite/ganache@7.5.0/src/chains/ethereum/console.log"
+          - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.8.2"
+          - "@openzeppelin/contracts-upgradeable=OpenZeppelin/openzeppelin-contracts-upgradeable@4.8.2/contracts"
+          - "@console.log=trufflesuite/ganache@7.7.7/src/chains/ethereum/console.log"
+        userdoc: true
+        devdoc: true
         optimizer:
             enabled: true
             runs: 200
