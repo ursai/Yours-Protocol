@@ -1,12 +1,10 @@
-# eth-template
-eth-template
+# eth-PE
 
 ## test
 - python3 <= 3.10.9
 - [brownie](https://eth-brownie.readthedocs.io/en/stable/index.html)
   ```shell
   pip install brownie
-  brownie init -f
   ```
 
 - [ganache](https://github.com/trufflesuite/ganache)
