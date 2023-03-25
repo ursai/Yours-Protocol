@@ -25,7 +25,7 @@
   brownie deploy [--network [sepolia]]
   ```
 
-## deployed contracts on sepolia 
-- Prompt: [`0x39B6FAcF814148ba12FE7eE3afe98db1D39588a7`](https://sepolia.etherscan.io/address/0x39B6FAcF814148ba12FE7eE3afe98db1D39588a7)
-- ParameterSource: [`0xf18C27e72cB56AE8A9112B4F4a24684f56E637EA`](https://sepolia.etherscan.io/address/0xf18C27e72cB56AE8A9112B4F4a24684f56E637EA)
-- Chatbot: [`0x1A4D674c1233d733d2014010Ce2AC6647bA3aE87`](https://sepolia.etherscan.io/address/0x1A4D674c1233d733d2014010Ce2AC6647bA3aE87)
+## deployed contracts on sepolia
+- Prompt: [`0x45440dD32Df444eCCCb0A54DbF671ecf239817F1`](https://sepolia.etherscan.io/address/0x45440dD32Df444eCCCb0A54DbF671ecf239817F1)
+- ParameterSource: [`0xb8206258e6506b6Caa9cc1Ee54D872cf08540926`](https://sepolia.etherscan.io/address/0xb8206258e6506b6Caa9cc1Ee54D872cf08540926)
+- Chatbot: [`0x9272F2aC8517Dd5be7959aBfA4f5684529046B10`](https://sepolia.etherscan.io/address/0x9272F2aC8517Dd5be7959aBfA4f5684529046B10)
