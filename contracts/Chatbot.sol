@@ -4,6 +4,13 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
+// import "@console.log/console.sol";
+
+
+interface PromptContract {
+    function GetPromptUnsubstantiatedParamList(uint256 id, uint256 version)
+        external virtual;
+}
 
 
 // TODO: change the contract name
@@ -22,11 +29,17 @@ contract ChatbotContract is Context {
     // TODO: do we need owner2ids mappping?
     mapping(address => uint256[]) private owner2ids;
 
+    PromptContract public immutable _PromptContract;
+
     struct Chatbot {
         string name;
         string description;
         uint256 promptId;
         uint256 promptVersion;
+    }
+
+    constructor(PromptContract promptContract) {
+        _PromptContract = promptContract;
     }
 
 
@@ -39,6 +52,9 @@ contract ChatbotContract is Context {
         public
         returns(uint256)
     {
+        // check if `promptId` and `promptVersion` are valid
+        _PromptContract.GetPromptUnsubstantiatedParamList(promptId, promptVersion);
+
         uint256 chatbotId = _chatbot_id.current();
         _chatbot_id.increment();
 
@@ -51,12 +67,16 @@ contract ChatbotContract is Context {
     }
 
 
-    /// @dev `promptId` & `promptVersion` validity checks are not enforced, offload to application.
+
     function UpdateChatbotPrompt(uint256 chatbotId, uint256 promptId, uint256 promptVersion)
         public
     {
+        /// @dev if chatbotId is invalid, id2owner[chatbotId] returns zero address.
         address owner = id2owner[chatbotId];
         require(owner == _msgSender(), "Only the owner can update the chatbot.");
+
+        _PromptContract.GetPromptUnsubstantiatedParamList(promptId, promptVersion);
+
         id2chatbot[chatbotId].promptId = promptId;
         id2chatbot[chatbotId].promptVersion = promptVersion;
 

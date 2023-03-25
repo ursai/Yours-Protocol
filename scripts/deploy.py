@@ -4,11 +4,13 @@ from brownie import (
     ChatbotContract,
     accounts,
     config,
+    network,
 )
 
 
 def main():
+    verify = network.show_active() != "development"
     accounts.default = myaccount = accounts.add(config["wallets"]["from_key"])
-    myaccount.deploy(PromptContract, publish_source=True)
-    myaccount.deploy(ParameterSourceContract, publish_source=True)
-    myaccount.deploy(ChatbotContract, publish_source=True)
+    prompt = myaccount.deploy(PromptContract, publish_source=verify)
+    myaccount.deploy(ParameterSourceContract, publish_source=verify)
+    myaccount.deploy(ChatbotContract, prompt, publish_source=verify)

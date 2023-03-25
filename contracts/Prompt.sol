@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 // import "@console.log/console.sol";
 
-
 // TODO: change the contract name
 contract PromptContract is Context {
 
