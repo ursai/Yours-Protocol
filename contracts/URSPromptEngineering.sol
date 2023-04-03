@@ -29,7 +29,7 @@ contract URSPromptEngineering is Context {
         string name;
         string description;
         uint256 promptId;
-        uint256 promptVerison;
+        uint256 promptVersion;
         ParameterSubstantiation[] paramSubstantiations;
     }
 
@@ -109,7 +109,7 @@ contract URSPromptEngineering is Context {
 
     // Prompt methods
     function CreatePrompt(
-        string[] calldata params,
+        string[] memory params,
         uint256[] calldata paramSourceIds,
         uint256 templateType,
         string calldata template
@@ -120,7 +120,11 @@ contract URSPromptEngineering is Context {
         uint256 promptId = nextPromptId;
         ++nextPromptId;
 
-        idPromptMap[promptId].push(Prompt(params, paramSourceIds, new ParameterRef[](0), templateType, template));
+        Prompt storage prompt = idPromptMap[promptId].push();
+        prompt.params = params;
+        prompt.paramSourceIds = paramSourceIds;
+        prompt.templateType = templateType;
+        prompt.template = template;
         idPromptOwnerMap[promptId] = _msgSender();
         ownerPromptIdsMap[_msgSender()].push(promptId);
 
@@ -132,7 +136,7 @@ contract URSPromptEngineering is Context {
 
     function UpdatePrompt(
         uint256 id,
-        string[] calldata params,
+        string[] memory params,
         uint256[] calldata paramSourceIds,
         uint256 templateType,
         string calldata template
@@ -141,9 +145,12 @@ contract URSPromptEngineering is Context {
         require(IsPromptSourceValid(params, paramSourceIds), "Invalid prompt parameter sources");
         require(idPromptMap[id].length > 0, "Prompt does not exist");
 
-        idPromptMap[id].push(Prompt(params, paramSourceIds, new ParameterRef[](0), templateType, template));
+        Prompt storage latestPrompt = idPromptMap[id].push();
+        latestPrompt.params = params;
+        latestPrompt.paramSourceIds = paramSourceIds;
+        latestPrompt.templateType = templateType;
+        latestPrompt.template = template;
         uint256 latestVersion = idPromptMap[id].length - 1;
-        Prompt storage latestPrompt = idPromptMap[id][latestVersion];
         GetUnsubstantiatedParams(latestPrompt, id, latestVersion);
 
         Prompt storage previousPrompt = idPromptMap[id][latestVersion - 1];
@@ -162,7 +169,7 @@ contract URSPromptEngineering is Context {
     }
 
     function IsPromptSourceValid(
-        string[] calldata params,
+        string[] memory params,
         uint256[] calldata paramSourceIds
     ) internal view returns (bool) {
         if (params.length != paramSourceIds.length) {
@@ -252,7 +259,7 @@ contract URSPromptEngineering is Context {
         string calldata description,
         uint256 promptId,
         uint256 promptVersion,
-        ParameterSubstantiation[] calldata paramSubstantiations
+        ParameterSubstantiation[] memory paramSubstantiations
     ) external returns (uint256) {
         require(bytes(name).length > 0, "Chatbot name must be non-empty");
         require(idPromptMap[promptId].length > 0, "Chatbot prompt does not exist");
@@ -262,7 +269,15 @@ contract URSPromptEngineering is Context {
         uint256 chatbotId = nextChatbotId;
         ++nextChatbotId;
 
-        idChatbotMap[chatbotId] = Chatbot(name, description, promptId, promptVersion, paramSubstantiations);
+        Chatbot storage chatbot = idChatbotMap[chatbotId];
+        chatbot.name = name;
+        chatbot.description = description;
+        chatbot.promptId = promptId;
+        chatbot.promptVersion = promptVersion;
+        for (uint256 i = 0; i < paramSubstantiations.length; ++i) {
+            chatbot.paramSubstantiations.push(paramSubstantiations[i]);
+        }
+
         idChatbotOwnerMap[chatbotId] = _msgSender();
         ownerChatbotIdsMap[_msgSender()].push(chatbotId);
 
@@ -274,22 +289,25 @@ contract URSPromptEngineering is Context {
         uint256 chatbotId,
         uint256 newPromptId,
         uint256 newPromptVersion,
-        ParameterSubstantiation[] calldata newParamSubstantiations
+        ParameterSubstantiation[] memory newParamSubstantiations
     ) external {
         require(idPromptMap[newPromptId].length > 0, "Chatbot new prompt does not exist");
         require(newPromptVersion < idPromptMap[newPromptId].length, "Chatbot new prompt version does not exist");
         require(IsFullySubstantiated(idPromptMap[newPromptId][newPromptVersion].unsubstantiatedParams, newParamSubstantiations), "Chatbot must have a fully substantiated prompt");
 
-        idChatbotMap[chatbotId].promptId = newPromptId;
-        idChatbotMap[chatbotId].promptVerison = newPromptVersion;
-        idChatbotMap[chatbotId].paramSubstantiations = newParamSubstantiations;
+        Chatbot storage chatbot = idChatbotMap[chatbotId];
+        chatbot.promptId = newPromptId;
+        chatbot.promptVersion = newPromptVersion;
+        for (uint256 i = 0; i < newParamSubstantiations.length; ++i) {
+            chatbot.paramSubstantiations.push(newParamSubstantiations[i]);
+        }
 
         emit ChatbotUpdated(chatbotId, newPromptId, newPromptVersion);
     }
 
     function IsFullySubstantiated(
         ParameterRef[] memory paramRefs,
-        ParameterSubstantiation[] calldata substantiations
+        ParameterSubstantiation[] memory substantiations
     ) internal pure returns (bool) {
         if (paramRefs.length != substantiations.length) {
             return false;
@@ -311,7 +329,7 @@ contract URSPromptEngineering is Context {
 
     function IsParamSubstantiated(
         ParameterRef memory paramRef,
-        ParameterSubstantiation calldata substantiation
+        ParameterSubstantiation memory substantiation
     ) internal pure returns (bool) {
         if (paramRef.promptId != substantiation.promptId) {
             return false;
