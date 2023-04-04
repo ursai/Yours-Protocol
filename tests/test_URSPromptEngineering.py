@@ -3,15 +3,18 @@ from brownie import (
     URSPromptEngineering,
     accounts,
     reverts,
-    convert
+    convert,
 )
 from web3 import constants
+
 
 def str_to_hex(val):
     return convert.datatypes.HexString(val.encode(), "bytes")
 
+
 def uint_to_hex(val):
     return convert.datatypes.HexString(val, "bytes32")
+
 
 def uints_to_hex(vals):
     result = b""
@@ -19,9 +22,11 @@ def uints_to_hex(vals):
         result += convert.datatypes.HexString(val, "bytes32")
     return convert.datatypes.HexString(result, "bytes")
 
+
 @pytest.fixture(scope="module")
 def urs_pe():
     return accounts[0].deploy(URSPromptEngineering)
+
 
 def test_CreatePrompt(urs_pe):
     tx = urs_pe.CreatePrompt([], [], 1, "ipfs://prompt_addr")
@@ -31,9 +36,17 @@ def test_CreatePrompt(urs_pe):
     assert urs_pe.GetPromptOwner(0) == accounts[0]
     assert urs_pe.GetPromptIdsByOwner(accounts[0]) == [0]
 
-    tx = urs_pe.CreatePrompt(["profession"], [0], 0, "Write a job description for {{0}}")
+    tx = urs_pe.CreatePrompt(
+        ["profession"], [0], 0, "Write a job description for {{0}}"
+    )
     assert tx.return_value == 1
-    assert urs_pe.GetPrompt(1, 0) == (["profession"], [0], [(1, 0, 0)], 0, "Write a job description for {{0}}")
+    assert urs_pe.GetPrompt(1, 0) == (
+        ["profession"],
+        [0],
+        [(1, 0, 0)],
+        0,
+        "Write a job description for {{0}}",
+    )
     assert urs_pe.GetPromptLatestVersionNumber(1) == 0
     assert urs_pe.GetPromptOwner(1) == accounts[0]
     assert urs_pe.GetPromptIdsByOwner(accounts[0]) == [0, 1]
@@ -42,6 +55,7 @@ def test_CreatePrompt(urs_pe):
         urs_pe.CreatePrompt(["profession", "gender"], [0, 1], 1, "ipfs://prompt_addr")
     with reverts("Invalid prompt parameter sources"):
         urs_pe.CreatePrompt(["profession", "gender"], [0], 1, "ipfs://prompt_addr")
+
 
 def test_CreateParameterSource(urs_pe):
     tx = urs_pe.CreateParameterSource(1, str_to_hex("male"))
@@ -69,6 +83,7 @@ def test_CreateParameterSource(urs_pe):
     with reverts("Source prompt does not exist"):
         urs_pe.CreateParameterSource(3, convert.to_bytes(0) + convert.to_bytes(1))
 
+
 def test_UpdatePrompt(urs_pe):
     tx = urs_pe.UpdatePrompt(0, ["gender"], [1], 1, "ipfs://prompt_addr")
     assert tx.return_value == 1
@@ -77,13 +92,16 @@ def test_UpdatePrompt(urs_pe):
     assert urs_pe.GetPromptLatestVersionNumber(0) == 1
 
     with reverts("Invalid additioal prompt parameter sources"):
-        urs_pe.UpdatePrompt(0, ["nationality", "birthday"], [2], 1, "ipfs://prompt_addr")
+        urs_pe.UpdatePrompt(
+            0, ["nationality", "birthday"], [2], 1, "ipfs://prompt_addr"
+        )
     with reverts("Invalid additioal prompt parameter sources"):
         urs_pe.UpdatePrompt(0, ["nationality"], [0], 1, "ipfs://prompt_addr")
     with reverts("Invalid additioal prompt parameter sources"):
         urs_pe.UpdatePrompt(0, ["job-description"], [3], 1, "ipfs://prompt_addr")
     with reverts("Prompt does not exist"):
         urs_pe.UpdatePrompt(2, [], [], 1, "ipfs://prompt_addr")
+
 
 def test_CreateChatbot(urs_pe):
     tx = urs_pe.CreateChatbot("bot", "testing", 0, 0, [])
@@ -103,21 +121,45 @@ def test_CreateChatbot(urs_pe):
     with reverts("Chatbot must have a fully substantiated prompt"):
         urs_pe.CreateChatbot("bot", "", 1, 0, [(0, 0, 0, 1)])
 
+
 def test_CreateChatbotFromNestedPrompt(urs_pe):
-    tx = urs_pe.CreatePrompt(["age", "gender", "job-description"], [0, 1, 3], 1, "ipfs://prompt_addr")
+    tx = urs_pe.CreatePrompt(
+        ["age", "gender", "job-description"], [0, 1, 3], 1, "ipfs://prompt_addr"
+    )
     assert tx.return_value == 2
     assert urs_pe.GetPromptLatestVersionNumber(2) == 0
     assert urs_pe.GetPromptOwner(2) == accounts[0]
     assert urs_pe.GetPromptIdsByOwner(accounts[0]) == (0, 1, 2)
-    assert urs_pe.GetPrompt(2, 0) == (["age", "gender", "job-description"], [0, 1, 3], [(2, 0, 0), (1, 0, 0)], 1, "ipfs://prompt_addr")
+    assert urs_pe.GetPrompt(2, 0) == (
+        ["age", "gender", "job-description"],
+        [0, 1, 3],
+        [(2, 0, 0), (1, 0, 0)],
+        1,
+        "ipfs://prompt_addr",
+    )
 
     age_source_id = urs_pe.CreateParameterSource(1, str_to_hex("25")).return_value
-    profession_source_id = urs_pe.CreateParameterSource(1, str_to_hex("farmer")).return_value
-    tx = urs_pe.CreateChatbot("bot", "testing", 2, 0, [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)])
+    profession_source_id = urs_pe.CreateParameterSource(
+        1, str_to_hex("farmer")
+    ).return_value
+    tx = urs_pe.CreateChatbot(
+        "bot",
+        "testing",
+        2,
+        0,
+        [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)],
+    )
     assert tx.return_value == 1
-    assert urs_pe.GetChatbot(1) == ("bot", "testing", 2, 0, [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)])
+    assert urs_pe.GetChatbot(1) == (
+        "bot",
+        "testing",
+        2,
+        0,
+        [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)],
+    )
     assert urs_pe.GetChatbotOwner(1) == accounts[0]
     assert urs_pe.GetChatbotIdsByOwner(accounts[0]) == [0, 1]
+
 
 def test_UpdateChatbotPrompt(urs_pe):
     urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 0, 2)])

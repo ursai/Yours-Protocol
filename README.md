@@ -17,15 +17,18 @@
   brownie test
   ```
 
+## demo
+```shell
+brownie run demo
+```
+
 ## deploy
 - set variables in _.env_ file
 
 - use brownie to deploy and verify source code on etherscan
   ```shell
-  brownie deploy [--network [sepolia]]
+  brownie run deploy [--network [sepolia]]
   ```
 
 ## deployed contracts on sepolia
-- Prompt: [`0x45440dD32Df444eCCCb0A54DbF671ecf239817F1`](https://sepolia.etherscan.io/address/0x45440dD32Df444eCCCb0A54DbF671ecf239817F1)
-- ParameterSource: [`0xb8206258e6506b6Caa9cc1Ee54D872cf08540926`](https://sepolia.etherscan.io/address/0xb8206258e6506b6Caa9cc1Ee54D872cf08540926)
-- Chatbot: [`0x9272F2aC8517Dd5be7959aBfA4f5684529046B10`](https://sepolia.etherscan.io/address/0x9272F2aC8517Dd5be7959aBfA4f5684529046B10)
+    [0x96f574f280E7EB845fE1AaE02cD7c27EbcfC6e33](https://sepolia.etherscan.io/address/0x96f574f280E7EB845fE1AaE02cD7c27EbcfC6e33#code)
