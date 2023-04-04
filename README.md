@@ -31,4 +31,4 @@ brownie run demo
   ```
 
 ## deployed contracts on sepolia
-    [0x96f574f280E7EB845fE1AaE02cD7c27EbcfC6e33](https://sepolia.etherscan.io/address/0x96f574f280E7EB845fE1AaE02cD7c27EbcfC6e33#code)
+- [0x96f574f280E7EB845fE1AaE02cD7c27EbcfC6e33](https://sepolia.etherscan.io/address/0x96f574f280E7EB845fE1AaE02cD7c27EbcfC6e33#code)
