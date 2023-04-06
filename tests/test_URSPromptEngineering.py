@@ -162,8 +162,41 @@ def test_CreateChatbotFromNestedPrompt(urs_pe):
 
 
 def test_UpdateChatbotPrompt(urs_pe):
+
+    # old length(=1) < new length(=2)
+    age_source_id = urs_pe.CreateParameterSource(1, str_to_hex("25")).return_value
+    profession_source_id = urs_pe.CreateParameterSource(
+        1, str_to_hex("farmer")
+    ).return_value
+    urs_pe.UpdateChatbotPrompt(
+        0, 2, 0, [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)]
+    )
+    assert urs_pe.GetChatbot(0) == (
+        "bot",
+        "testing",
+        2,
+        0,
+        [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)],
+    )
+
+    # old length(=2) > new length(=1)
+    urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 0, 1)])
+    assert urs_pe.GetChatbot(0) == (
+        "bot",
+        "testing",
+        1,
+        0,
+        [(1, 0, 0, 1)],
+    )
+    # old length(=1) == new length(=1)
     urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 0, 2)])
-    assert urs_pe.GetChatbot(0) == ("bot", "testing", 1, 0, [(1, 0, 0, 2)])
+    assert urs_pe.GetChatbot(0) == (
+        "bot",
+        "testing",
+        1,
+        0,
+        [(1, 0, 0, 2)],
+    )
 
     with reverts("Chatbot does not exist"):
         urs_pe.UpdateChatbotPrompt(2, 1, 0, [(1, 0, 0, 2)])
