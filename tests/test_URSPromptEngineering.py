@@ -164,6 +164,8 @@ def test_CreateChatbotFromNestedPrompt(urs_pe):
 def test_UpdateChatbotPrompt(urs_pe):
     urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 0, 2)])
     assert urs_pe.GetChatbot(0) == ("bot", "testing", 1, 0, [(1, 0, 0, 2)])
+    urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 0, 1)])
+    assert urs_pe.GetChatbot(0) == ("bot", "testing", 1, 0, [(1, 0, 0, 1)])
 
     with reverts("Chatbot does not exist"):
         urs_pe.UpdateChatbotPrompt(2, 1, 0, [(1, 0, 0, 2)])

@@ -166,6 +166,8 @@ contract URSPromptEngineering is Context {
         // TODO: since the list of unsubstantiated parameters is the same for different versions, we should only store one copy per prompt ID
         latestPrompt.unsubstantiatedParams = previousPrompt.unsubstantiatedParams;
 
+        emit PromptUpdated(id, latestVersion);
+
         return latestVersion;
     }
 
@@ -318,7 +320,12 @@ contract URSPromptEngineering is Context {
         Chatbot storage chatbot = idChatbotMap[chatbotId];
         chatbot.promptId = newPromptId;
         chatbot.promptVersion = newPromptVersion;
-        for (uint256 i = 0; i < newParamSubstantiations.length; ++i) {
+
+        for (uint256 i = 0; i < chatbot.paramSubstantiations.length; ++i) {
+            chatbot.paramSubstantiations[i] = newParamSubstantiations[i];
+        }
+        for (uint256 i = chatbot.paramSubstantiations.length;
+             i < newParamSubstantiations.length; ++i) {
             chatbot.paramSubstantiations.push(newParamSubstantiations[i]);
         }
 
@@ -336,7 +343,7 @@ contract URSPromptEngineering is Context {
             bool isParamSubstantiated = false;
             for (uint256 j = 0; j < paramRefs.length; ++j) {
                 if (IsParamSubstantiated(paramRefs[i], substantiations[j])) {
-                    isParamSubstantiated = true;
+                      isParamSubstantiated = true;
                     break;
                 }
             }
