@@ -31,7 +31,7 @@ def urs_pe():
 def test_CreatePrompt(urs_pe):
     tx = urs_pe.CreatePrompt([], [], 1, "ipfs://prompt_addr")
     assert tx.return_value == 0
-    assert urs_pe.GetPrompt(0, 0) == ([], [], [], 1, "ipfs://prompt_addr")
+    assert urs_pe.GetPrompt(0, 0) == ([], [], 1, "ipfs://prompt_addr")
     assert urs_pe.GetPromptLatestVersionNumber(0) == 0
     assert urs_pe.GetPromptOwner(0) == accounts[0]
     assert urs_pe.GetPromptIdsByOwner(accounts[0]) == [0]
@@ -43,13 +43,13 @@ def test_CreatePrompt(urs_pe):
     assert urs_pe.GetPrompt(1, 0) == (
         ["profession"],
         [0],
-        [(1, 0, 0)],
         0,
         "Write a job description for {{0}}",
     )
     assert urs_pe.GetPromptLatestVersionNumber(1) == 0
     assert urs_pe.GetPromptOwner(1) == accounts[0]
     assert urs_pe.GetPromptIdsByOwner(accounts[0]) == [0, 1]
+    assert urs_pe.GetPromptUnsubstantiatedParams(1) == [(1, 0)]
 
     with reverts("Invalid prompt parameter sources"):
         urs_pe.CreatePrompt(["profession", "gender"], [0, 1], 1, "ipfs://prompt_addr")
@@ -87,9 +87,10 @@ def test_CreateParameterSource(urs_pe):
 def test_UpdatePrompt(urs_pe):
     tx = urs_pe.UpdatePrompt(0, ["gender"], [1], 1, "ipfs://prompt_addr")
     assert tx.return_value == 1
-    assert urs_pe.GetPrompt(0, 0) == ([], [], [], 1, "ipfs://prompt_addr")
-    assert urs_pe.GetPrompt(0, 1) == (["gender"], [1], [], 1, "ipfs://prompt_addr")
+    assert urs_pe.GetPrompt(0, 0) == ([], [], 1, "ipfs://prompt_addr")
+    assert urs_pe.GetPrompt(0, 1) == (["gender"], [1], 1, "ipfs://prompt_addr")
     assert urs_pe.GetPromptLatestVersionNumber(0) == 1
+    assert urs_pe.GetPromptUnsubstantiatedParams(0) == []
 
     with reverts("Invalid additioal prompt parameter sources"):
         urs_pe.UpdatePrompt(
@@ -119,7 +120,7 @@ def test_CreateChatbot(urs_pe):
     with reverts("Chatbot must have a fully substantiated prompt"):
         urs_pe.CreateChatbot("bot", "", 1, 0, [])
     with reverts("Chatbot must have a fully substantiated prompt"):
-        urs_pe.CreateChatbot("bot", "", 1, 0, [(0, 0, 0, 1)])
+        urs_pe.CreateChatbot("bot", "", 1, 0, [(0, 0, 1)])
 
 
 def test_CreateChatbotFromNestedPrompt(urs_pe):
@@ -133,10 +134,10 @@ def test_CreateChatbotFromNestedPrompt(urs_pe):
     assert urs_pe.GetPrompt(2, 0) == (
         ["age", "gender", "job-description"],
         [0, 1, 3],
-        [(2, 0, 0), (1, 0, 0)],
         1,
         "ipfs://prompt_addr",
     )
+    assert urs_pe.GetPromptUnsubstantiatedParams(2) == [(2, 0), (1, 0)]
 
     age_source_id = urs_pe.CreateParameterSource(1, str_to_hex("25")).return_value
     profession_source_id = urs_pe.CreateParameterSource(
@@ -147,7 +148,7 @@ def test_CreateChatbotFromNestedPrompt(urs_pe):
         "testing",
         2,
         0,
-        [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)],
+        [(2, 0, age_source_id), (1, 0, profession_source_id)],
     )
     assert tx.return_value == 1
     assert urs_pe.GetChatbot(1) == (
@@ -155,7 +156,7 @@ def test_CreateChatbotFromNestedPrompt(urs_pe):
         "testing",
         2,
         0,
-        [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)],
+        [(2, 0, age_source_id), (1, 0, profession_source_id)],
     )
     assert urs_pe.GetChatbotOwner(1) == accounts[0]
     assert urs_pe.GetChatbotIdsByOwner(accounts[0]) == [0, 1]
@@ -169,37 +170,37 @@ def test_UpdateChatbotPrompt(urs_pe):
         1, str_to_hex("farmer")
     ).return_value
     urs_pe.UpdateChatbotPrompt(
-        0, 2, 0, [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)]
+        0, 2, 0, [(2, 0, age_source_id), (1, 0, profession_source_id)]
     )
     assert urs_pe.GetChatbot(0) == (
         "bot",
         "testing",
         2,
         0,
-        [(2, 0, 0, age_source_id), (1, 0, 0, profession_source_id)],
+        [(2, 0, age_source_id), (1, 0, profession_source_id)],
     )
 
     # old length(=2) > new length(=1)
-    urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 0, 1)])
+    urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 1)])
     assert urs_pe.GetChatbot(0) == (
         "bot",
         "testing",
         1,
         0,
-        [(1, 0, 0, 1)],
+        [(1, 0, 1)],
     )
     # old length(=1) == new length(=1)
-    urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 0, 2)])
+    urs_pe.UpdateChatbotPrompt(0, 1, 0, [(1, 0, 2)])
     assert urs_pe.GetChatbot(0) == (
         "bot",
         "testing",
         1,
         0,
-        [(1, 0, 0, 2)],
+        [(1, 0, 2)],
     )
 
     with reverts("Chatbot does not exist"):
-        urs_pe.UpdateChatbotPrompt(2, 1, 0, [(1, 0, 0, 2)])
+        urs_pe.UpdateChatbotPrompt(2, 1, 0, [(1, 0, 2)])
     with reverts("Chatbot new prompt does not exist"):
         urs_pe.UpdateChatbotPrompt(0, 3, 0, [])
     with reverts("Chatbot new prompt version does not exist"):
