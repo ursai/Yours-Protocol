@@ -58,30 +58,28 @@ def test_CreatePrompt(urs_pe):
 
 
 def test_CreateParameterSource(urs_pe):
-    tx = urs_pe.CreateParameterSource(1, str_to_hex("male"))
+    tx = urs_pe.CreateStringParameterSource("male")
     assert tx.return_value == 1
     assert urs_pe.GetParameterSource(1) == (1, str_to_hex("male"))
     assert urs_pe.GetParameterSourceOwner(1) == accounts[0]
     assert urs_pe.GetParameterSourceIdsByOwner(accounts[0]) == [1]
 
-    tx = urs_pe.CreateParameterSource(2, str_to_hex("ipfs://source_addr"))
+    tx = urs_pe.CreateIPFSParameterSource("ipfs://source_addr")
     assert tx.return_value == 2
     assert urs_pe.GetParameterSource(2) == (2, str_to_hex("ipfs://source_addr"))
     assert urs_pe.GetParameterSourceOwner(2) == accounts[0]
     assert urs_pe.GetParameterSourceIdsByOwner(accounts[0]) == [1, 2]
 
-    tx = urs_pe.CreateParameterSource(3, uints_to_hex((1, 0)))
+    tx = urs_pe.CreatePromptParameterSource(1, 0)
     assert tx.return_value == 3
     assert urs_pe.GetParameterSource(3) == (3, uints_to_hex((1, 0)))
     assert urs_pe.GetParameterSourceOwner(3) == accounts[0]
     assert urs_pe.GetParameterSourceIdsByOwner(accounts[0]) == [1, 2, 3]
 
-    with reverts("SourceType must be positive"):
-        urs_pe.CreateParameterSource(0, convert.to_bytes("error".encode(), "bytes"))
     with reverts("Source prompt does not exist"):
-        urs_pe.CreateParameterSource(3, convert.to_bytes(2) + convert.to_bytes(0))
+        urs_pe.CreatePromptParameterSource(2, 0)
     with reverts("Source prompt does not exist"):
-        urs_pe.CreateParameterSource(3, convert.to_bytes(0) + convert.to_bytes(1))
+        urs_pe.CreatePromptParameterSource(0, 1)
 
 
 def test_UpdatePrompt(urs_pe):
@@ -139,10 +137,8 @@ def test_CreateChatbotFromNestedPrompt(urs_pe):
     )
     assert urs_pe.GetPromptUnsubstantiatedParams(2) == [(2, 0), (1, 0)]
 
-    age_source_id = urs_pe.CreateParameterSource(1, str_to_hex("25")).return_value
-    profession_source_id = urs_pe.CreateParameterSource(
-        1, str_to_hex("farmer")
-    ).return_value
+    age_source_id = urs_pe.CreateStringParameterSource("25").return_value
+    profession_source_id = urs_pe.CreateStringParameterSource("farmer").return_value
     tx = urs_pe.CreateChatbot(
         "bot",
         "testing",
@@ -165,10 +161,8 @@ def test_CreateChatbotFromNestedPrompt(urs_pe):
 def test_UpdateChatbotPrompt(urs_pe):
 
     # old length(=1) < new length(=2)
-    age_source_id = urs_pe.CreateParameterSource(1, str_to_hex("25")).return_value
-    profession_source_id = urs_pe.CreateParameterSource(
-        1, str_to_hex("farmer")
-    ).return_value
+    age_source_id = urs_pe.CreateStringParameterSource("25").return_value
+    profession_source_id = urs_pe.CreateStringParameterSource("farmer").return_value
     urs_pe.UpdateChatbotPrompt(
         0, 2, 0, [(2, 0, age_source_id), (1, 0, profession_source_id)]
     )

@@ -218,11 +218,31 @@ contract URSPromptEngineering is Context {
         }
     }
 
+    function CreateStringParameterSource(string calldata str) external returns (uint256) {
+        return CreateParameterSource(1, bytes(str));
+    }
+
+    function CreateIPFSParameterSource(string calldata ipfsAddr) external returns (uint256) {
+        return CreateParameterSource(2, bytes(ipfsAddr));
+    }
+
+    function CreatePromptParameterSource(
+        uint256 promptId,
+        uint256 promptVersion
+    ) external returns (uint256) {
+        bytes memory content = new bytes(64);
+        for (uint256 i = 0; i < 32; ++i) {
+            content[i] = bytes1(uint8((promptId << (8*i)) >> (8*31)));
+            content[i+32] = bytes1(uint8((promptVersion << (8*i)) >> (8*31)));
+        }
+        return CreateParameterSource(3, content);
+    }
+
     // ParameterSource methods
     function CreateParameterSource(
         uint256 sourceType,
-        bytes calldata content
-    ) external returns (uint256) {
+        bytes memory content
+    ) internal returns (uint256) {
         require(sourceType > 0, "SourceType must be positive");
 
         uint256 sourceId = nextSourceId;
