@@ -12,7 +12,7 @@ contract URSPromptEngineering is Context {
         uint32[] paramSourceIds;
         // TODO: add a mapping from an index in this.paramSourceIds to a ParameterRef that points to a referenced prompt's unsubstantiated parameter
         //       this will allow the same parameter to be used to fill out multiple templates
-        uint32 templateType;
+        uint8 templateType;
         string template;
     }
 
@@ -22,7 +22,7 @@ contract URSPromptEngineering is Context {
     }
 
     struct ParameterSource {
-        uint32 sourceType;
+        uint8 sourceType;
         bytes content;
     }
 
@@ -116,7 +116,7 @@ contract URSPromptEngineering is Context {
     function CreatePrompt(
         string[] memory params,
         uint32[] calldata paramSourceIds,
-        uint32 templateType,
+        uint8 templateType,
         string calldata template
     ) external returns (uint32) {
         // TODO: add prompt source loop detection
@@ -145,7 +145,7 @@ contract URSPromptEngineering is Context {
         // TODO: also allow updates to existing source IDs
         string[] memory additionalParams,
         uint32[] calldata additionalSourceIds,
-        uint32 templateType,
+        uint8 templateType,
         string calldata template
     ) external returns (uint256) {
         require(idPromptMap[id].length > 0, "Prompt does not exist");
@@ -237,7 +237,7 @@ contract URSPromptEngineering is Context {
 
     // ParameterSource methods
     function CreateParameterSource(
-        uint32 sourceType,
+        uint8 sourceType,
         bytes memory content
     ) internal returns (uint32) {
         require(sourceType > 0, "SourceType must be positive");
