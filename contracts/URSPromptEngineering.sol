@@ -9,121 +9,121 @@ contract URSPromptEngineering is Context {
     struct Prompt {
         // TODO: maybe add name/descriptin to prompt as well; alternatively, maybe we should remove name/description from chatbot struct
         string[] params;
-        uint256[] paramSourceIds;
+        uint32[] paramSourceIds;
         // TODO: add a mapping from an index in this.paramSourceIds to a ParameterRef that points to a referenced prompt's unsubstantiated parameter
         //       this will allow the same parameter to be used to fill out multiple templates
-        uint256 templateType;
+        uint8 templateType;
         string template;
     }
 
     struct ParameterRef {
-        uint256 promptId;
-        uint256 paramIndex;
+        uint32 promptId;
+        uint32 paramIndex;
     }
 
     struct ParameterSource {
-        uint256 sourceType;
+        uint8 sourceType;
         bytes content;
     }
 
     struct Chatbot {
         string name;
         string description;
-        uint256 promptId;
-        uint256 promptVersion;
+        uint32 promptId;
+        uint32 promptVersion;
         ParameterSubstantiation[] paramSubstantiations;
     }
 
     struct ParameterSubstantiation {
-        uint256 promptId;
-        uint256 paramIndex;
-        uint256 sourceId;
+        uint32 promptId;
+        uint32 paramIndex;
+        uint32 sourceId;
     }
 
     // Event definitions
-    event PromptCreated(address indexed owner, uint256 indexed promptId);
-    event PromptUpdated(uint256 indexed promptId, uint256 indexed latestVersion);
-    event ParameterSourceCreated(address indexed owner, uint256 indexed paramSourceId);
-    event ChatbotCreated(address indexed owner, uint256 indexed chatbotId);
-    event ChatbotUpdated(uint256 indexed chatbotId, uint256 newPromptId, uint256 newPromptVersion);
+    event PromptCreated(address indexed owner, uint32 indexed promptId);
+    event PromptUpdated(uint32 indexed promptId, uint256 indexed latestVersion);
+    event ParameterSourceCreated(address indexed owner, uint32 indexed paramSourceId);
+    event ChatbotCreated(address indexed owner, uint32 indexed chatbotId);
+    event ChatbotUpdated(uint32 indexed chatbotId, uint32 newPromptId, uint32 newPromptVersion);
 
     // Internal data structure definitions
-    uint256 private nextPromptId;
-    mapping(uint256 => Prompt[]) private idPromptMap;
-    mapping(uint256 => address) private idPromptOwnerMap;
-    mapping(address => uint256[]) private ownerPromptIdsMap;
-    mapping(uint256 => ParameterRef[]) private idUnsubstantiatedParamsMap;
+    uint32 private nextPromptId;
+    mapping(uint32 => Prompt[]) private idPromptMap;
+    mapping(uint32 => address) private idPromptOwnerMap;
+    mapping(address => uint32[]) private ownerPromptIdsMap;
+    mapping(uint32 => ParameterRef[]) private idUnsubstantiatedParamsMap;
 
-    uint256 private nextSourceId = 1; // 0 is the ID reserved for unspecified sources
-    mapping(uint256 => ParameterSource) private idSourceMap;
-    mapping(uint256 => address) private idSourceOwnerMap;
-    mapping(address => uint256[]) private ownerSourceIdsMap;
+    uint32 private nextSourceId = 1; // 0 is the ID reserved for unspecified sources
+    mapping(uint32 => ParameterSource) private idSourceMap;
+    mapping(uint32 => address) private idSourceOwnerMap;
+    mapping(address => uint32[]) private ownerSourceIdsMap;
 
-    uint256 private nextChatbotId;
-    mapping(uint256 => Chatbot) private idChatbotMap;
-    mapping(uint256 => address) private idChatbotOwnerMap;
-    mapping(address => uint256[]) private ownerChatbotIdsMap;
+    uint32 private nextChatbotId;
+    mapping(uint32 => Chatbot) private idChatbotMap;
+    mapping(uint32 => address) private idChatbotOwnerMap;
+    mapping(address => uint32[]) private ownerChatbotIdsMap;
 
     // Getter methods for Prompt, ParameterSource, and Chatbot
     function GetPrompt(
-        uint256 id,
-        uint256 version
+        uint32 id,
+        uint32 version
     ) external view returns (Prompt memory) {
         return idPromptMap[id][version];
     }
 
-    function GetPromptLatestVersionNumber(uint256 id) external view returns (uint256) {
+    function GetPromptLatestVersionNumber(uint32 id) external view returns (uint256) {
         return idPromptMap[id].length - 1;
     }
 
-    function GetPromptOwner(uint256 id) external view returns (address) {
+    function GetPromptOwner(uint32 id) external view returns (address) {
         return idPromptOwnerMap[id];
     }
 
-    function GetPromptIdsByOwner(address owner) external view returns (uint256[] memory) {
+    function GetPromptIdsByOwner(address owner) external view returns (uint32[] memory) {
         return ownerPromptIdsMap[owner];
     }
 
-    function GetPromptUnsubstantiatedParams(uint256 id) external view returns (ParameterRef[] memory) {
+    function GetPromptUnsubstantiatedParams(uint32 id) external view returns (ParameterRef[] memory) {
         return idUnsubstantiatedParamsMap[id];
     }
 
-    function GetParameterSource(uint256 id) external view returns (ParameterSource memory) {
+    function GetParameterSource(uint32 id) external view returns (ParameterSource memory) {
         return idSourceMap[id];
     }
 
-    function GetParameterSourceOwner(uint256 id) external view returns (address) {
+    function GetParameterSourceOwner(uint32 id) external view returns (address) {
         return idSourceOwnerMap[id];
     }
 
-    function GetParameterSourceIdsByOwner(address owner) external view returns (uint256[] memory) {
+    function GetParameterSourceIdsByOwner(address owner) external view returns (uint32[] memory) {
         return ownerSourceIdsMap[owner];
     }
 
-    function GetChatbot(uint256 id) external view returns (Chatbot memory) {
+    function GetChatbot(uint32 id) external view returns (Chatbot memory) {
         return idChatbotMap[id];
     }
 
-    function GetChatbotOwner(uint256 id) external view returns (address) {
+    function GetChatbotOwner(uint32 id) external view returns (address) {
         return idChatbotOwnerMap[id];
     }
 
-    function GetChatbotIdsByOwner(address owner) external view returns (uint256[] memory) {
+    function GetChatbotIdsByOwner(address owner) external view returns (uint32[] memory) {
         return ownerChatbotIdsMap[owner];
     }
 
     // Prompt methods
     function CreatePrompt(
         string[] memory params,
-        uint256[] calldata paramSourceIds,
-        uint256 templateType,
+        uint32[] calldata paramSourceIds,
+        uint8 templateType,
         string calldata template
-    ) external returns (uint256) {
+    ) external returns (uint32) {
         // TODO: add prompt source loop detection
         // TODO: convert transaction revert strings to bronwnie dev comments to save gas
         require(IsPromptSourceValid(params, paramSourceIds, false), "Invalid prompt parameter sources");
 
-        uint256 promptId = nextPromptId;
+        uint32 promptId = nextPromptId;
         ++nextPromptId;
 
         Prompt storage prompt = idPromptMap[promptId].push();
@@ -141,11 +141,11 @@ contract URSPromptEngineering is Context {
     }
 
     function UpdatePrompt(
-        uint256 id,
+        uint32 id,
         // TODO: also allow updates to existing source IDs
         string[] memory additionalParams,
-        uint256[] calldata additionalSourceIds,
-        uint256 templateType,
+        uint32[] calldata additionalSourceIds,
+        uint8 templateType,
         string calldata template
     ) external returns (uint256) {
         require(idPromptMap[id].length > 0, "Prompt does not exist");
@@ -158,7 +158,7 @@ contract URSPromptEngineering is Context {
 
         latestPrompt.params = previousPrompt.params;
         latestPrompt.paramSourceIds = previousPrompt.paramSourceIds;
-        for (uint256 i = 0; i < additionalParams.length; ++i) {
+        for (uint32 i = 0; i < additionalParams.length; ++i) {
             latestPrompt.params.push(additionalParams[i]);
             latestPrompt.paramSourceIds.push(additionalSourceIds[i]);
         }
@@ -171,13 +171,13 @@ contract URSPromptEngineering is Context {
 
     function IsPromptSourceValid(
         string[] memory params,
-        uint256[] calldata paramSourceIds,
+        uint32[] calldata paramSourceIds,
         bool requireSubstantiation
     ) internal view returns (bool) {
         if (params.length != paramSourceIds.length) {
             return false;
         }
-        for (uint256 i = 0; i < params.length; ++i) {
+        for (uint32 i = 0; i < params.length; ++i) {
             if (paramSourceIds[i] == 0) {
                 if (requireSubstantiation) {
                     return false;
@@ -195,11 +195,11 @@ contract URSPromptEngineering is Context {
         return true;
     }
 
-    function PopulateUnsubstantiatedParams(uint256 promptId) internal {
+    function PopulateUnsubstantiatedParams(uint32 promptId) internal {
         Prompt storage prompt = idPromptMap[promptId][0];
         ParameterRef[] storage unsubstantiatedParams = idUnsubstantiatedParamsMap[promptId];
-        for (uint256 i = 0; i < prompt.params.length; ++i) {
-            uint256 sourceId = prompt.paramSourceIds[i];
+        for (uint32 i = 0; i < prompt.params.length; ++i) {
+            uint32 sourceId = prompt.paramSourceIds[i];
             if (sourceId == 0) {
                 unsubstantiatedParams.push(ParameterRef(promptId, i));
             } else {
@@ -208,9 +208,9 @@ contract URSPromptEngineering is Context {
                 // TODO: we should probably add a constant store instead of hard-coding 3 here
                 if (source.sourceType == 3)
                 {
-                    uint256 sourcePromptId = GetPromptIdFromParameterSource(source);
+                    uint32 sourcePromptId = GetPromptIdFromParameterSource(source);
                     ParameterRef[] storage sourceUnsubstantiatedParams = idUnsubstantiatedParamsMap[sourcePromptId];
-                    for (uint256 j = 0; j < sourceUnsubstantiatedParams.length; ++j) {
+                    for (uint32 j = 0; j < sourceUnsubstantiatedParams.length; ++j) {
                         unsubstantiatedParams.push(sourceUnsubstantiatedParams[j]);
                     }
                 }
@@ -218,34 +218,31 @@ contract URSPromptEngineering is Context {
         }
     }
 
-    function CreateStringParameterSource(string calldata str) external returns (uint256) {
+    function CreateStringParameterSource(string calldata str) external returns (uint32) {
         return CreateParameterSource(1, bytes(str));
     }
 
-    function CreateIPFSParameterSource(string calldata ipfsAddr) external returns (uint256) {
+    function CreateIPFSParameterSource(string calldata ipfsAddr) external returns (uint32) {
         return CreateParameterSource(2, bytes(ipfsAddr));
     }
 
     function CreatePromptParameterSource(
-        uint256 promptId,
-        uint256 promptVersion
-    ) external returns (uint256) {
-        bytes memory content = new bytes(64);
-        for (uint256 i = 0; i < 32; ++i) {
-            content[i] = bytes1(uint8((promptId << (8*i)) >> (8*31)));
-            content[i+32] = bytes1(uint8((promptVersion << (8*i)) >> (8*31)));
-        }
+        uint32 promptId,
+        uint32 promptVersion
+    ) external returns (uint32) {
+        bytes memory content;
+        content = abi.encode(promptId, promptVersion);
         return CreateParameterSource(3, content);
     }
 
     // ParameterSource methods
     function CreateParameterSource(
-        uint256 sourceType,
+        uint8 sourceType,
         bytes memory content
-    ) internal returns (uint256) {
+    ) internal returns (uint32) {
         require(sourceType > 0, "SourceType must be positive");
 
-        uint256 sourceId = nextSourceId;
+        uint32 sourceId = nextSourceId;
         ++nextSourceId;
 
         idSourceMap[sourceId] = ParameterSource(sourceType, content);
@@ -253,7 +250,7 @@ contract URSPromptEngineering is Context {
         ownerSourceIdsMap[_msgSender()].push(sourceId);
 
         if (sourceType == 3) {
-            (uint256 promptId, uint256 promptVersion) = GetPromptFromParameterSource(idSourceMap[sourceId]);
+            (uint32 promptId, uint32 promptVersion) = GetPromptFromParameterSource(idSourceMap[sourceId]);
             require(promptVersion < idPromptMap[promptId].length, "Source prompt does not exist");
         }
 
@@ -265,37 +262,31 @@ contract URSPromptEngineering is Context {
         if (source.sourceType != 3) {
             return true;
         }
-        uint256 promptId = GetPromptIdFromParameterSource(source);
+        uint32 promptId = GetPromptIdFromParameterSource(source);
         return idUnsubstantiatedParamsMap[promptId].length == 0;
     }
 
-    function GetPromptFromParameterSource(ParameterSource memory source) internal pure returns (uint256, uint256) {
+    function GetPromptFromParameterSource(ParameterSource memory source) internal pure returns (uint32, uint32) {
         require(source.sourceType == 3, "Only applicable to parameter with type 3");
-        uint256 promptId = ReadUInt256FromBytes(source.content, 0);
-        uint256 promptVersion = ReadUInt256FromBytes(source.content, 1);
+
+        (uint32 promptId, uint32 promptVersion) = abi.decode(source.content, (uint32, uint32));
+
         return (promptId, promptVersion);
     }
 
-    function GetPromptIdFromParameterSource(ParameterSource memory source) internal pure returns (uint256) {
+    function GetPromptIdFromParameterSource(ParameterSource memory source) internal pure returns (uint32) {
         require(source.sourceType == 3, "Only applicable to parameter with type 3");
-        uint256 promptId = ReadUInt256FromBytes(source.content, 0);
+
+        (uint32 promptId, ) = abi.decode(source.content, (uint32, uint32));
+
         return promptId;
     }
 
-    function GetPromptVersionFromParameterSource(ParameterSource memory source) internal pure returns (uint256) {
+    function GetPromptVersionFromParameterSource(ParameterSource memory source) internal pure returns (uint32) {
         require(source.sourceType == 3, "Only applicable to parameter with type 3");
-        uint256 promptVersion = ReadUInt256FromBytes(source.content, 1);
-        return promptVersion;
-    }
 
-    function ReadUInt256FromBytes(bytes memory byteArr, uint256 offset) internal pure returns (uint256) {
-        uint256 val = 0;
-        for (uint256 i = offset * 32; i < (offset + 1) * 32; ++i) {
-            uint8 segment = uint8(byteArr[i]);
-            val |= uint256(segment);
-            val << 8;
-        }
-        return val;
+        (, uint32 promptVersion) = abi.decode(source.content, (uint32, uint32));
+        return promptVersion;
     }
 
     // TODO: implement source type 4: On-Chain Smart Contract Output
@@ -304,16 +295,16 @@ contract URSPromptEngineering is Context {
     function CreateChatbot(
         string calldata name,
         string calldata description,
-        uint256 promptId,
-        uint256 promptVersion,
+        uint32 promptId,
+        uint32 promptVersion,
         ParameterSubstantiation[] memory paramSubstantiations
-    ) external returns (uint256) {
+    ) external returns (uint32) {
         require(bytes(name).length > 0, "Chatbot name must be non-empty");
         require(idPromptMap[promptId].length > 0, "Chatbot prompt does not exist");
         require(promptVersion < idPromptMap[promptId].length, "Chatbot prompt version does not exist");
         require(IsFullySubstantiated(idUnsubstantiatedParamsMap[promptId], paramSubstantiations), "Chatbot must have a fully substantiated prompt");
 
-        uint256 chatbotId = nextChatbotId;
+        uint32 chatbotId = nextChatbotId;
         ++nextChatbotId;
 
         Chatbot storage chatbot = idChatbotMap[chatbotId];
@@ -321,7 +312,7 @@ contract URSPromptEngineering is Context {
         chatbot.description = description;
         chatbot.promptId = promptId;
         chatbot.promptVersion = promptVersion;
-        for (uint256 i = 0; i < paramSubstantiations.length; ++i) {
+        for (uint32 i = 0; i < paramSubstantiations.length; ++i) {
             chatbot.paramSubstantiations.push(paramSubstantiations[i]);
         }
 
@@ -333,9 +324,9 @@ contract URSPromptEngineering is Context {
     }
 
     function UpdateChatbotPrompt(
-        uint256 chatbotId,
-        uint256 newPromptId,
-        uint256 newPromptVersion,
+        uint32 chatbotId,
+        uint32 newPromptId,
+        uint32 newPromptVersion,
         ParameterSubstantiation[] memory newParamSubstantiations
     ) external {
         require(bytes(idChatbotMap[chatbotId].name).length > 0, "Chatbot does not exist");
@@ -349,14 +340,14 @@ contract URSPromptEngineering is Context {
         chatbot.promptVersion = newPromptVersion;
 
         if (chatbot.paramSubstantiations.length > newParamSubstantiations.length) {
-            for (uint256 i = 0; i < newParamSubstantiations.length; ++i) {
+            for (uint32 i = 0; i < newParamSubstantiations.length; ++i) {
                 chatbot.paramSubstantiations[i] = newParamSubstantiations[i];
             }
             for (uint256 i = newParamSubstantiations.length; i < chatbot.paramSubstantiations.length; ++i) {
                 chatbot.paramSubstantiations.pop();
             }
         } else {
-            for (uint256 i = 0; i < chatbot.paramSubstantiations.length; ++i) {
+            for (uint32 i = 0; i < chatbot.paramSubstantiations.length; ++i) {
                 chatbot.paramSubstantiations[i] = newParamSubstantiations[i];
             }
             for (uint256 i = chatbot.paramSubstantiations.length; i < newParamSubstantiations.length; ++i) {
@@ -374,9 +365,9 @@ contract URSPromptEngineering is Context {
         if (paramRefs.length != substantiations.length) {
             return false;
         }
-        for (uint256 i = 0; i < paramRefs.length; ++i) {
+        for (uint32 i = 0; i < paramRefs.length; ++i) {
             bool isParamSubstantiated = false;
-            for (uint256 j = 0; j < paramRefs.length; ++j) {
+            for (uint32 j = 0; j < paramRefs.length; ++j) {
                 if (IsParamSubstantiated(paramRefs[i], substantiations[j])) {
                     isParamSubstantiated = true;
                     break;
