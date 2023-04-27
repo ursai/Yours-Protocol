@@ -1,120 +1,325 @@
 {
   "coverage": {
-    "ChatbotContract": {
+    "URSPromptEngineering": {
       "branches": {
-        "ChatbotContract.UpdateChatbotPrompt": [
-          0,
-          0,
-          1
-        ]
-      },
-      "statements": {
-        "ChatbotContract.UpdateChatbotPrompt": [
-          0,
-          4
-        ]
-      },
-      "totals": {
-        "branches": [
-          0,
-          0,
-          1
-        ],
-        "statements": [
-          0,
-          4
-        ]
-      }
-    },
-    "ParameterSourceContract": {
-      "branches": {},
-      "statements": {},
-      "totals": {
-        "branches": [
-          0,
-          0,
-          0
-        ],
-        "statements": [
-          0,
-          0
-        ]
-      }
-    },
-    "PromptContract": {
-      "branches": {
-        "PromptContract.GetPromptUnsubstantiatedParamList": [
-          1,
-          1,
-          1
-        ],
-        "PromptContract.UpdatePrompt": [
-          2,
-          2,
-          2
-        ]
-      },
-      "statements": {
-        "PromptContract.GetPromptUnsubstantiatedParamList": [
-          2,
-          2
-        ],
-        "PromptContract.UpdatePrompt": [
-          6,
-          6
-        ]
-      },
-      "totals": {
-        "branches": [
+        "URSPromptEngineering.CreateChatbot": [
           3,
           3,
           3
         ],
-        "statements": [
+        "URSPromptEngineering.CreateParameterSource": [
+          3,
+          2,
+          3
+        ],
+        "URSPromptEngineering.CreatePrompt": [
+          1,
+          1,
+          1
+        ],
+        "URSPromptEngineering.GetPromptFromParameterSource": [
+          1,
+          0,
+          1
+        ],
+        "URSPromptEngineering.GetPromptIdFromParameterSource": [
+          1,
+          0,
+          1
+        ],
+        "URSPromptEngineering.IsFullySubstantiated": [
+          3,
+          3,
+          3
+        ],
+        "URSPromptEngineering.IsParamSubstantiated": [
+          3,
+          2,
+          4
+        ],
+        "URSPromptEngineering.IsParameterSourceSubstantiated": [
+          1,
+          1,
+          1
+        ],
+        "URSPromptEngineering.IsPromptSourceValid": [
+          6,
+          6,
+          6
+        ],
+        "URSPromptEngineering.PopulateUnsubstantiatedParams": [
+          2,
+          2,
+          2
+        ],
+        "URSPromptEngineering.UpdateChatbotPrompt": [
+          5,
+          4,
+          5
+        ],
+        "URSPromptEngineering.UpdatePrompt": [
+          2,
+          1,
+          2
+        ]
+      },
+      "statements": {
+        "URSPromptEngineering.CreateChatbot": [
+          15,
+          15
+        ],
+        "URSPromptEngineering.CreateParameterSource": [
           8,
           8
+        ],
+        "URSPromptEngineering.CreatePrompt": [
+          11,
+          11
+        ],
+        "URSPromptEngineering.GetPromptFromParameterSource": [
+          1,
+          1
+        ],
+        "URSPromptEngineering.GetPromptIdFromParameterSource": [
+          1,
+          1
+        ],
+        "URSPromptEngineering.IsFullySubstantiated": [
+          7,
+          7
+        ],
+        "URSPromptEngineering.IsParamSubstantiated": [
+          2,
+          4
+        ],
+        "URSPromptEngineering.IsParameterSourceSubstantiated": [
+          2,
+          2
+        ],
+        "URSPromptEngineering.IsPromptSourceValid": [
+          6,
+          6
+        ],
+        "URSPromptEngineering.PopulateUnsubstantiatedParams": [
+          4,
+          4
+        ],
+        "URSPromptEngineering.UpdateChatbotPrompt": [
+          16,
+          16
+        ],
+        "URSPromptEngineering.UpdatePrompt": [
+          12,
+          12
+        ]
+      },
+      "totals": {
+        "branches": [
+          31,
+          25,
+          32
+        ],
+        "statements": [
+          85,
+          87
         ]
       }
     }
   },
   "highlights": {
     "branches": {
-      "ChatbotContract": {
+      "URSPromptEngineering": {
         "0": [],
-        "1": [],
-        "2": [
+        "1": [
           [
-            1812,
-            1833,
-            "red",
-            ""
-          ]
-        ]
-      },
-      "ParameterSourceContract": {
-        "0": [],
-        "1": [],
-        "3": []
-      },
-      "PromptContract": {
-        "0": [],
-        "1": [],
-        "4": [
-          [
-            3573,
-            3597,
+            11313,
+            11335,
             "green",
             ""
           ],
           [
-            2671,
-            2692,
+            11472,
+            11516,
             "green",
             ""
           ],
           [
-            2817,
-            2839,
+            11576,
+            11656,
+            "green",
+            ""
+          ],
+          [
+            9042,
+            9056,
+            "yellow",
+            ""
+          ],
+          [
+            9346,
+            9361,
+            "green",
+            ""
+          ],
+          [
+            9492,
+            9536,
+            "green",
+            ""
+          ],
+          [
+            4331,
+            4381,
+            "green",
+            ""
+          ],
+          [
+            10122,
+            10144,
+            "yellow",
+            ""
+          ],
+          [
+            10462,
+            10484,
+            "yellow",
+            ""
+          ],
+          [
+            14337,
+            14379,
+            "green",
+            ""
+          ],
+          [
+            14602,
+            14656,
+            "green",
+            ""
+          ],
+          [
+            14785,
+            14805,
+            "green",
+            ""
+          ],
+          [
+            15067,
+            15111,
+            "green",
+            ""
+          ],
+          [
+            15163,
+            15211,
+            "orange",
+            ""
+          ],
+          [
+            15263,
+            15291,
+            "orange",
+            ""
+          ],
+          [
+            15295,
+            15323,
+            "orange",
+            ""
+          ],
+          [
+            9793,
+            9815,
+            "green",
+            ""
+          ],
+          [
+            6427,
+            6465,
+            "green",
+            ""
+          ],
+          [
+            6574,
+            6596,
+            "green",
+            ""
+          ],
+          [
+            6620,
+            6641,
+            "green",
+            ""
+          ],
+          [
+            6819,
+            6841,
+            "green",
+            ""
+          ],
+          [
+            6917,
+            6938,
+            "green",
+            ""
+          ],
+          [
+            6943,
+            6981,
+            "green",
+            ""
+          ],
+          [
+            7443,
+            7456,
+            "green",
+            ""
+          ],
+          [
+            7806,
+            7828,
+            "green",
+            ""
+          ],
+          [
+            12561,
+            12607,
+            "green",
+            ""
+          ],
+          [
+            12652,
+            12696,
+            "yellow",
+            ""
+          ],
+          [
+            12847,
+            12897,
+            "green",
+            ""
+          ],
+          [
+            12961,
+            13047,
+            "green",
+            ""
+          ],
+          [
+            13263,
+            13331,
+            "green",
+            ""
+          ],
+          [
+            5326,
+            5362,
+            "yellow",
+            ""
+          ],
+          [
+            5421,
+            5485,
             "green",
             ""
           ]
@@ -122,7 +327,7 @@
       }
     },
     "statements": {
-      "ChatbotContract": {
+      "URSPromptEngineering": {
         "0": [
           [
             712,
@@ -133,296 +338,614 @@
         ],
         "1": [
           [
-            911,
-            932,
+            11305,
+            11370,
             "green",
             ""
           ],
           [
-            1032,
-            1051,
-            "green",
-            ""
-          ]
-        ],
-        "2": [
-          [
-            2396,
-            2415,
+            11380,
+            11454,
             "green",
             ""
           ],
           [
-            2578,
-            2601,
+            11464,
+            11558,
             "green",
             ""
           ],
           [
-            1244,
-            1267,
+            11568,
+            11707,
             "green",
             ""
           ],
           [
-            1278,
-            1353,
+            11760,
+            11775,
             "green",
             ""
           ],
           [
-            1363,
-            1397,
+            11845,
+            11864,
             "green",
             ""
           ],
           [
-            1407,
-            1446,
+            11874,
+            11907,
             "green",
             ""
           ],
           [
-            1457,
-            1501,
+            11917,
+            11944,
             "green",
             ""
           ],
           [
-            1511,
-            1527,
+            11954,
+            11991,
             "green",
             ""
           ],
           [
-            2215,
-            2236,
+            12072,
+            12130,
             "green",
             ""
           ],
           [
-            1804,
-            1876,
-            "red",
-            ""
-          ],
-          [
-            1886,
-            1927,
-            "red",
-            ""
-          ],
-          [
-            1937,
-            1988,
-            "red",
-            ""
-          ],
-          [
-            1999,
-            2044,
-            "red",
-            ""
-          ]
-        ]
-      },
-      "ParameterSourceContract": {
-        "0": [
-          [
-            712,
-            729,
-            "green",
-            ""
-          ]
-        ],
-        "1": [
-          [
-            911,
-            932,
+            12053,
+            12056,
             "green",
             ""
           ],
           [
-            1032,
-            1051,
-            "green",
-            ""
-          ]
-        ],
-        "3": [
-          [
-            2159,
-            2178,
+            12151,
+            12194,
             "green",
             ""
           ],
           [
-            2346,
-            2369,
+            12204,
+            12252,
             "green",
             ""
           ],
           [
-            1527,
-            1549,
+            12263,
+            12307,
             "green",
             ""
           ],
           [
-            1559,
-            1617,
+            12317,
+            12333,
             "green",
             ""
           ],
           [
-            1627,
-            1660,
+            8541,
+            8589,
             "green",
             ""
           ],
           [
-            1670,
-            1708,
+            9034,
+            9088,
             "green",
             ""
           ],
           [
-            1719,
-            1776,
+            9139,
+            9153,
             "green",
             ""
           ],
           [
-            1787,
-            1802,
+            9164,
+            9224,
             "green",
             ""
           ],
           [
-            1977,
-            1997,
-            "green",
-            ""
-          ]
-        ]
-      },
-      "PromptContract": {
-        "0": [
-          [
-            712,
-            729,
-            "green",
-            ""
-          ]
-        ],
-        "1": [
-          [
-            911,
-            932,
+            9234,
+            9275,
             "green",
             ""
           ],
           [
-            1032,
-            1051,
-            "green",
-            ""
-          ]
-        ],
-        "4": [
-          [
-            3829,
-            3848,
+            9285,
+            9331,
             "green",
             ""
           ],
           [
-            4016,
-            4039,
+            9484,
+            9569,
             "green",
             ""
           ],
           [
-            1679,
-            1701,
+            9590,
+            9641,
             "green",
             ""
           ],
           [
-            1712,
-            1782,
+            9651,
+            9666,
             "green",
             ""
           ],
           [
-            1792,
-            1825,
+            4323,
+            4418,
             "green",
             ""
           ],
           [
-            1835,
-            1873,
+            4469,
+            4483,
             "green",
             ""
           ],
           [
-            1883,
-            1925,
+            4556,
+            4578,
             "green",
             ""
           ],
           [
-            1936,
-            1951,
+            4588,
+            4626,
             "green",
             ""
           ],
           [
-            3565,
-            3634,
+            4636,
+            4670,
             "green",
             ""
           ],
           [
-            3644,
+            4680,
+            4706,
+            "green",
+            ""
+          ],
+          [
+            4716,
+            4757,
+            "green",
+            ""
+          ],
+          [
+            4767,
+            4813,
+            "green",
+            ""
+          ],
+          [
+            4824,
+            4863,
+            "green",
+            ""
+          ],
+          [
+            4874,
+            4916,
+            "green",
+            ""
+          ],
+          [
+            4926,
+            4941,
+            "green",
+            ""
+          ],
+          [
+            8766,
+            8811,
+            "green",
+            ""
+          ],
+          [
+            8821,
+            8861,
+            "green",
+            ""
+          ],
+          [
+            8388,
+            8431,
+            "green",
+            ""
+          ],
+          [
             3667,
+            3690,
             "green",
             ""
           ],
           [
-            2663,
-            2734,
+            3917,
+            3949,
             "green",
             ""
           ],
           [
-            2809,
-            2889,
+            3781,
+            3809,
             "green",
             ""
           ],
           [
-            2791,
-            2794,
+            3279,
+            3301,
             "green",
             ""
           ],
           [
-            2910,
-            2974,
+            3543,
+            3574,
             "green",
             ""
           ],
           [
-            3040,
-            3077,
+            3400,
+            3427,
             "green",
             ""
           ],
           [
-            3087,
-            3113,
+            2590,
+            2621,
+            "green",
+            ""
+          ],
+          [
+            10114,
+            10189,
+            "green",
+            ""
+          ],
+          [
+            10454,
+            10529,
+            "green",
+            ""
+          ],
+          [
+            2982,
+            3013,
+            "green",
+            ""
+          ],
+          [
+            2725,
+            2758,
+            "green",
+            ""
+          ],
+          [
+            2848,
+            2875,
+            "green",
+            ""
+          ],
+          [
+            3133,
+            3170,
+            "green",
+            ""
+          ],
+          [
+            14395,
+            14407,
+            "green",
+            ""
+          ],
+          [
+            14680,
+            14707,
+            "green",
+            ""
+          ],
+          [
+            14729,
+            14734,
+            "green",
+            ""
+          ],
+          [
+            14575,
+            14578,
+            "green",
+            ""
+          ],
+          [
+            14825,
+            14837,
+            "green",
+            ""
+          ],
+          [
+            14468,
+            14471,
+            "green",
+            ""
+          ],
+          [
+            14871,
+            14882,
+            "green",
+            ""
+          ],
+          [
+            15127,
+            15139,
+            "green",
+            ""
+          ],
+          [
+            15227,
+            15239,
+            "red",
+            ""
+          ],
+          [
+            15339,
+            15351,
+            "red",
+            ""
+          ],
+          [
+            15371,
+            15382,
+            "green",
+            ""
+          ],
+          [
+            9831,
+            9842,
+            "green",
+            ""
+          ],
+          [
+            9928,
+            9983,
+            "green",
+            ""
+          ],
+          [
+            6481,
+            6493,
+            "green",
+            ""
+          ],
+          [
+            6665,
+            6677,
+            "green",
+            ""
+          ],
+          [
+            6865,
+            6877,
+            "green",
+            ""
+          ],
+          [
+            7005,
+            7017,
+            "green",
+            ""
+          ],
+          [
+            6551,
+            6554,
+            "green",
+            ""
+          ],
+          [
+            7069,
+            7080,
+            "green",
+            ""
+          ],
+          [
+            7476,
+            7529,
+            "green",
+            ""
+          ],
+          [
+            8159,
+            8217,
+            "green",
+            ""
+          ],
+          [
+            8128,
+            8131,
+            "green",
+            ""
+          ],
+          [
+            7364,
+            7367,
+            "green",
+            ""
+          ],
+          [
+            12553,
+            12634,
+            "green",
+            ""
+          ],
+          [
+            12644,
+            12738,
+            "green",
+            ""
+          ],
+          [
+            12748,
+            12829,
+            "green",
+            ""
+          ],
+          [
+            12839,
+            12943,
+            "green",
+            ""
+          ],
+          [
+            12953,
+            13098,
+            "green",
+            ""
+          ],
+          [
+            13168,
+            13198,
+            "green",
+            ""
+          ],
+          [
+            13208,
+            13248,
+            "green",
+            ""
+          ],
+          [
+            13425,
+            13485,
+            "green",
+            ""
+          ],
+          [
+            13402,
+            13405,
+            "green",
+            ""
+          ],
+          [
+            13626,
+            13660,
+            "green",
+            ""
+          ],
+          [
+            13603,
+            13606,
+            "green",
+            ""
+          ],
+          [
+            13788,
+            13848,
+            "green",
+            ""
+          ],
+          [
+            13765,
+            13768,
+            "green",
+            ""
+          ],
+          [
+            13989,
+            14050,
+            "green",
+            ""
+          ],
+          [
+            13966,
+            13969,
+            "green",
+            ""
+          ],
+          [
+            14085,
+            14146,
+            "green",
+            ""
+          ],
+          [
+            5248,
+            5308,
+            "green",
+            ""
+          ],
+          [
+            5318,
+            5403,
+            "green",
+            ""
+          ],
+          [
+            5413,
+            5532,
+            "green",
+            ""
+          ],
+          [
+            5742,
+            5785,
+            "green",
+            ""
+          ],
+          [
+            5795,
+            5854,
+            "green",
+            ""
+          ],
+          [
+            5931,
+            5976,
+            "green",
+            ""
+          ],
+          [
+            5990,
+            6046,
+            "green",
+            ""
+          ],
+          [
+            5912,
+            5915,
+            "green",
+            ""
+          ],
+          [
+            6066,
+            6106,
+            "green",
+            ""
+          ],
+          [
+            6116,
+            6148,
+            "green",
+            ""
+          ],
+          [
+            6159,
+            6196,
+            "green",
+            ""
+          ],
+          [
+            6206,
+            6226,
             "green",
             ""
           ]
