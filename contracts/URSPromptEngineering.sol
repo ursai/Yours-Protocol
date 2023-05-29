@@ -3,7 +3,7 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 
-contract URSPromptEngineering is Context {
+contract GiroGiroAIAgentTool is Context {
 
     // Struct definitions
     struct Prompt {
