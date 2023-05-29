@@ -1,6 +1,6 @@
 import pytest
 from brownie import (
-    URSPromptEngineering,
+    GiroGiroAIAgentTool,
     accounts,
     reverts,
     convert,
@@ -25,7 +25,7 @@ def uints_to_hex(vals):
 
 @pytest.fixture(scope="module")
 def urs_pe():
-    return accounts[0].deploy(URSPromptEngineering)
+    return accounts[0].deploy(GiroGiroAIAgentTool)
 
 
 def test_CreatePrompt(urs_pe):
